@@ -10,7 +10,7 @@ import gsap from 'gsap';
  * Base
  */
 // Debug
-const gui = new dat.GUI()
+// const gui = new dat.GUI()
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -40,7 +40,20 @@ fontLoader.load(
     'fonts/helvetiker_regular.typeface.json',
     font => { 
         const textGeometry = new TextGeometry(
-            'Bricks 3D', {
+            'Bruno Borta', {
+                font,
+                size: 0.5,
+                height: 0.2,
+                curveSegments: 5,
+                bevelEnabled: true,
+                bevelThickness: 0.03,
+                bevelSize: 0.02,
+                bevelOffset: 0,
+                bevelSegments: 4,
+            }
+        );
+        const text2Geometry = new TextGeometry(
+            'Interactive Developer', {
                 font,
                 size: 0.5,
                 height: 0.2,
@@ -58,7 +71,7 @@ fontLoader.load(
         //use this to center the geometry. By default, Three.js
         //uses sphere bouding. We will change to the box one
         textGeometry.computeBoundingBox();
-        console.log(textGeometry.boundingBox);
+        text2Geometry.computeBoundingBox();
         // This shows an object with the min and max
         //vertice and we can manipulate this attributes
 
@@ -82,12 +95,15 @@ fontLoader.load(
 
         // Of course, there's a simpler way. kkk
         textGeometry.center();
+        text2Geometry.center();
 
         // const textMaterial = new THREE.MeshBasicMaterial({ wireframe: true });
         // const material = new THREE.MeshMatcapMaterial({ matcap: matcapTexture });
         const material = new THREE.MeshNormalMaterial();
         const textMesh = new THREE.Mesh(textGeometry, material);
-        scene.add(textMesh);
+        const text2Mesh = new THREE.Mesh(text2Geometry, material);
+        text2Mesh.position.y = -1;
+        scene.add(textMesh, text2Mesh);
 
         console.time('donuts');
 
@@ -164,9 +180,9 @@ camera.position.y = 1
 camera.position.z = -12
 scene.add(camera)
 
-gui.add(camera.position, 'x', -20, 20, 0.1)
-gui.add(camera.position, 'y', -20, 20, 0.1)
-gui.add(camera.position, 'z', -20, 20, 0.1)
+// gui.add(camera.position, 'x', -20, 20, 0.1)
+// gui.add(camera.position, 'y', -20, 20, 0.1)
+// gui.add(camera.position, 'z', -20, 20, 0.1)
 
 // Controls
 const controls = new OrbitControls(camera, canvas)
@@ -200,5 +216,5 @@ const tick = () =>
     window.requestAnimationFrame(tick)
 }
 
-gsap.to(camera.position, { duration: 2, x: 1, z: 2, ease: 'power2.inOut' })
+gsap.to(camera.position, { duration: 2, x: 1.5, z: 3, ease: 'power2.inOut' })
 tick()
