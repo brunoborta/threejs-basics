@@ -4,6 +4,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'lil-gui';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
+import gsap from 'gsap';
 
 /**
  * Base
@@ -28,7 +29,7 @@ const axesHelper = new THREE.AxesHelper();
  * Textures
  */
 const textureLoader = new THREE.TextureLoader();
-const matcapTexture = textureLoader.load('/textures/matcaps/8.png');
+const matcapTexture = textureLoader.load('/textures/matcaps/3.png');
 
 /**
  * Fonts
@@ -39,7 +40,7 @@ fontLoader.load(
     'fonts/helvetiker_regular.typeface.json',
     font => { 
         const textGeometry = new TextGeometry(
-            'Bruno Bortagaray', {
+            'Bricks 3D', {
                 font,
                 size: 0.5,
                 height: 0.2,
@@ -83,7 +84,8 @@ fontLoader.load(
         textGeometry.center();
 
         // const textMaterial = new THREE.MeshBasicMaterial({ wireframe: true });
-        const material = new THREE.MeshMatcapMaterial({ matcap: matcapTexture });
+        // const material = new THREE.MeshMatcapMaterial({ matcap: matcapTexture });
+        const material = new THREE.MeshNormalMaterial();
         const textMesh = new THREE.Mesh(textGeometry, material);
         scene.add(textMesh);
 
@@ -157,10 +159,14 @@ window.addEventListener('resize', () =>
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.x = 1
+camera.position.x = 8
 camera.position.y = 1
-camera.position.z = 2
+camera.position.z = -12
 scene.add(camera)
+
+gui.add(camera.position, 'x', -20, 20, 0.1)
+gui.add(camera.position, 'y', -20, 20, 0.1)
+gui.add(camera.position, 'z', -20, 20, 0.1)
 
 // Controls
 const controls = new OrbitControls(camera, canvas)
@@ -194,4 +200,5 @@ const tick = () =>
     window.requestAnimationFrame(tick)
 }
 
+gsap.to(camera.position, { duration: 2, x: 1, z: 2, ease: 'power2.inOut' })
 tick()
